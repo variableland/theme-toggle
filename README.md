@@ -1,51 +1,115 @@
-# theme-toggle
+# @vlandoss/theme-toggle
 
-A standalone TypeScript library scaffolded with [`@vlandoss/vland`](https://github.com/variableland/dx/tree/main/vland/cli).
+Light/dark/system color-mode toggle for React apps, with a tiny inline script that
+sets the theme **before first paint** to avoid the flash of the wrong theme (FOUC).
 
-## Install
+- Three modes: `light`, `dark`, and `system` (defaults to `system`).
+- `system` resolves against the OS `prefers-color-scheme` and tracks it live.
+- Persists the user's choice in `localStorage`.
+- Applies a `dark` class on `<html>` so you can style with plain CSS.
+- Emits a `CustomEvent` on every change so non-React code can react too.
+
+## Installation
 
 ```sh
-pnpm add theme-toggle
+pnpm add @vlandoss/theme-toggle
 ```
 
 ## Usage
 
+The package ships **two pieces** that work together.
+
+### 1. Inline script (prevents the theme flash)
+
+Load the prebuilt IIFE **before your app renders** — ideally as the first thing in
+`<head>`, blocking, so the correct `dark` class is on `<html>` before the page paints.
+
+```html
+<head>
+  <script src="https://unpkg.com/@vlandoss/theme-toggle/dist/initial.js"></script>
+  <!-- ...rest of head... -->
+</head>
+```
+
+On load it reads the stored mode (or `system` by default), toggles the `dark` class
+on `<html>` — resolving `system` against the OS preference — persists the mode, and
+exposes its runtime contract on `window.__COLOR_MODE__`.
+
+### 2. React hook (read & control the mode)
+
+```tsx
+import { useColorMode } from "@vlandoss/theme-toggle";
+
+function ThemeSwitch() {
+  const { mode, setMode } = useColorMode();
+  // mode -> "light" | "dark" | "system"
+
+  return (
+    <select value={mode} onChange={(e) => setMode(e.target.value)}>
+      <option value="light">Light</option>
+      <option value="dark">Dark</option>
+      <option value="system">System</option>
+    </select>
+  );
+}
+```
+
+Calling `setMode` persists the choice to `localStorage`, toggles the `dark` class on
+`<html>`, and dispatches the change event. While `mode` is `system`, the hook also
+follows the OS preference live as it changes.
+
+## Styling
+
+Style the two themes with the `dark` class that gets toggled on `<html>`:
+
+```css
+:root {
+  --bg: white;
+  --fg: black;
+}
+
+.dark {
+  --bg: black;
+  --fg: white;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+}
+```
+
+## How it works
+
+| Concern        | Value                                      |
+| -------------- | ------------------------------------------ |
+| DOM class      | `dark` on `document.documentElement`       |
+| Storage key    | `@vlandoss/theme-toggle.colorMode`         |
+| Change event   | `@vlandoss/theme-toggle.colorModeChange`   |
+
+The change event is a `CustomEvent` dispatched on `document`, with the new value in
+`event.detail.colorMode`:
+
 ```ts
-import { greet } from "theme-toggle";
-
-greet("vland");
+document.addEventListener("@vlandoss/theme-toggle.colorModeChange", (event) => {
+  console.log(event.detail.colorMode); // "light" | "dark" | "system"
+});
 ```
 
-## Set up tooling
+The inline script also publishes these names on `window.__COLOR_MODE__`
+(`STORAGE_KEY`, `CUSTOM_EVENT`, `COLOR_MODE`) so other scripts can read them without
+importing the package.
 
-This project uses [`rr`](https://github.com/variableland/dx/tree/main/run-run) (the `@rrlab/cli`) as the single entry point for lint, format, type-check, and build. The pre-configured `mise.toml` puts `./node_modules/.bin` on your `PATH`, so `rr` is invokable directly from the project root.
+## Development
 
 ```sh
-pnpm install                    # also pulls in @rrlab/cli
-rr plugins add biome            # lint + format (writes biome.json)
-rr plugins add ts               # type-check (writes tsconfig.json)
-rr plugins add tsdown           # bundle (writes tsdown.config.ts)
+pnpm install
+pnpm test   # functional tests run in a real browser via Vitest Browser Mode + Playwright
 ```
 
-Each `rr plugins add` records the plugin in `run-run.config.mts` and scaffolds its config file. Re-run any time you want a different toolset.
+The suite in `test/functional` covers both entry points: the `useColorMode` hook
+(`src/index.ts`) and the inline script (`src/initial.ts`).
 
-## Develop
+## License
 
-```sh
-rr jsc                  # lint + format check
-rr jsc --fix            # auto-fix
-rr tsc                  # type-check
-rr pack                 # build to dist/
-vitest run              # tests
-```
-
-## Release
-
-This package uses [Changesets](https://github.com/changesets/changesets). As a developer you only need to describe the change; the publish step is run by CI.
-
-```sh
-pnpm changeset            # describe a change
-pnpm changeset version    # bump versions + changelog (locally, when needed)
-```
-
-CI invokes `pnpm changeset publish` on `main`. `prepublishOnly` runs `rr pack` automatically before publish.
+MIT

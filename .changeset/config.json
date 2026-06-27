@@ -1,7 +1,7 @@
 {
-  "$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
-  "changelog": ["@changesets/changelog-github", { "repo": "theme-toggle/theme-toggle" }],
-  "commit": false,
+  "$schema": "https://unpkg.com/@changesets/config@3.1.1/schema.json",
+  "changelog": ["@changesets/changelog-github", { "repo": "variableland/theme-toggle" }],
+  "commit": true,
   "fixed": [],
   "linked": [],
   "access": "public",

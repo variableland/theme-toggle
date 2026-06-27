@@ -1,4 +1,4 @@
-name: CI
+name: Preview
 
 on:
   pull_request:
@@ -11,8 +11,15 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test:
+  preview:
     runs-on: ubuntu-latest
+
+    if: ${{ startsWith(github.head_ref, 'feat') || startsWith(github.head_ref, 'fix') || contains(github.event.pull_request.labels.*.name, 'preview') }}
+
+    permissions:
+      id-token: write
+      contents: read
+
     steps:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
@@ -22,14 +29,10 @@ jobs:
         with:
           node-version-file: .node-version
 
-      - name: ⌛ Setup pnpm
+      - name: ⌛ Setup CI
         uses: variableland/gh-actions/actions/setup-pnpm@main
 
-      - name: 💅 Check
-        run: pnpm rr check
-
-      - name: 🧪 Test
-        run: pnpm test
-
-      - name: 🔨 Build
-        run: pnpm build
+      - name: 🚀 Preview release
+        uses: variableland/gh-actions/actions/preview-release@main
+        with:
+          npm_token: ${{ secrets.NPM_TOKEN }}
