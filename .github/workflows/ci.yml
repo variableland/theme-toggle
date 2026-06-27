@@ -28,6 +28,9 @@ jobs:
       - name: 💅 Check
         run: pnpm rr check
 
+      - name: 🎭 Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+
       - name: 🧪 Test
         run: pnpm test
 
