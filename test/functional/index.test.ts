@@ -56,7 +56,7 @@ describe("useColorMode — initialization from localStorage", () => {
 
     const { result } = await renderHook(() => useColorMode());
 
-    expect(result.current.mode).toBe(COLOR_MODE.SYSTEM);
+    expect(result.current.colorMode).toBe(COLOR_MODE.SYSTEM);
     expect(readStoredMode()).toBe(COLOR_MODE.SYSTEM);
     expect(hasDarkClass()).toBe(false);
   });
@@ -66,7 +66,7 @@ describe("useColorMode — initialization from localStorage", () => {
 
     const { result } = await renderHook(() => useColorMode());
 
-    expect(result.current.mode).toBe(COLOR_MODE.DARK);
+    expect(result.current.colorMode).toBe(COLOR_MODE.DARK);
     expect(hasDarkClass()).toBe(true);
   });
 
@@ -75,7 +75,7 @@ describe("useColorMode — initialization from localStorage", () => {
 
     const { result } = await renderHook(() => useColorMode());
 
-    expect(result.current.mode).toBe(COLOR_MODE.LIGHT);
+    expect(result.current.colorMode).toBe(COLOR_MODE.LIGHT);
     expect(hasDarkClass()).toBe(false);
   });
 
@@ -86,7 +86,7 @@ describe("useColorMode — initialization from localStorage", () => {
 
     const { result } = await renderHook(() => useColorMode());
 
-    expect(result.current.mode).toBe(COLOR_MODE.SYSTEM);
+    expect(result.current.colorMode).toBe(COLOR_MODE.SYSTEM);
     expect(consoleError).toHaveBeenCalledWith("Failed to read color mode from localStorage", expect.any(Error));
 
     consoleError.mockRestore();
@@ -99,7 +99,7 @@ describe("useColorMode — system mode follows the OS preference", () => {
 
     const { result } = await renderHook(() => useColorMode());
 
-    expect(result.current.mode).toBe(COLOR_MODE.SYSTEM);
+    expect(result.current.colorMode).toBe(COLOR_MODE.SYSTEM);
     expect(hasDarkClass()).toBe(true);
   });
 
@@ -120,20 +120,20 @@ describe("useColorMode — system mode follows the OS preference", () => {
     media.emitChange(true);
 
     expect(hasDarkClass()).toBe(true);
-    expect(result.current.mode).toBe(COLOR_MODE.SYSTEM);
+    expect(result.current.colorMode).toBe(COLOR_MODE.SYSTEM);
   });
 });
 
-describe("useColorMode — setMode side effects", () => {
+describe("useColorMode — setColorMode side effects", () => {
   it("toggles the dark class, persists, and emits an event when switching to dark", async () => {
     const events = captureColorModeEvents();
     const { result, act } = await renderHook(() => useColorMode());
 
     await act(() => {
-      result.current.setMode(COLOR_MODE.DARK);
+      result.current.setColorMode(COLOR_MODE.DARK);
     });
 
-    expect(result.current.mode).toBe(COLOR_MODE.DARK);
+    expect(result.current.colorMode).toBe(COLOR_MODE.DARK);
     expect(hasDarkClass()).toBe(true);
     expect(readStoredMode()).toBe(COLOR_MODE.DARK);
     expect(events.details.at(-1)).toBe(COLOR_MODE.DARK);
@@ -147,10 +147,10 @@ describe("useColorMode — setMode side effects", () => {
     expect(hasDarkClass()).toBe(true);
 
     await act(() => {
-      result.current.setMode(COLOR_MODE.LIGHT);
+      result.current.setColorMode(COLOR_MODE.LIGHT);
     });
 
-    expect(result.current.mode).toBe(COLOR_MODE.LIGHT);
+    expect(result.current.colorMode).toBe(COLOR_MODE.LIGHT);
     expect(hasDarkClass()).toBe(false);
     expect(readStoredMode()).toBe(COLOR_MODE.LIGHT);
   });
@@ -160,10 +160,10 @@ describe("useColorMode — setMode side effects", () => {
     const { result, act } = await renderHook(() => useColorMode());
 
     await act(() => {
-      result.current.setMode(COLOR_MODE.DARK);
+      result.current.setColorMode(COLOR_MODE.DARK);
     });
     await act(() => {
-      result.current.setMode(COLOR_MODE.LIGHT);
+      result.current.setColorMode(COLOR_MODE.LIGHT);
     });
 
     expect(events.details).toContain(COLOR_MODE.DARK);

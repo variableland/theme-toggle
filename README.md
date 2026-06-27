@@ -41,11 +41,11 @@ exposes its runtime contract on `window.__COLOR_MODE__`.
 import { useColorMode } from "@vlandoss/theme-toggle";
 
 function ThemeSwitch() {
-  const { mode, setMode } = useColorMode();
-  // mode -> "light" | "dark" | "system"
+  const { colorMode, setColorMode } = useColorMode();
+  // colorMode -> "light" | "dark" | "system"
 
   return (
-    <select value={mode} onChange={(e) => setMode(e.target.value)}>
+    <select value={colorMode} onChange={(e) => setColorMode(e.target.value)}>
       <option value="light">Light</option>
       <option value="dark">Dark</option>
       <option value="system">System</option>
@@ -54,9 +54,9 @@ function ThemeSwitch() {
 }
 ```
 
-Calling `setMode` persists the choice to `localStorage`, toggles the `dark` class on
-`<html>`, and dispatches the change event. While `mode` is `system`, the hook also
-follows the OS preference live as it changes.
+Calling `setColorMode` persists the choice to `localStorage`, toggles the `dark` class
+on `<html>`, and dispatches the change event. While `colorMode` is `system`, the hook
+also follows the OS preference live as it changes.
 
 ## Styling
 

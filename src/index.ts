@@ -2,7 +2,7 @@ import * as React from "react";
 import { COLOR_MODE, COLOR_MODE_EVENT, COLOR_MODE_STORAGE_KEY, type ColorMode } from "./const.ts";
 
 export function useColorMode() {
-  const [mode, setMode] = React.useState<ColorMode>(() => {
+  const [colorMode, setColorMode] = React.useState<ColorMode>(() => {
     if (typeof localStorage === "undefined") {
       return COLOR_MODE.SYSTEM;
     }
@@ -27,27 +27,27 @@ export function useColorMode() {
   });
 
   React.useEffect(() => {
-    localStorage.setItem(COLOR_MODE_STORAGE_KEY, mode);
+    localStorage.setItem(COLOR_MODE_STORAGE_KEY, colorMode);
     document.dispatchEvent(
       new CustomEvent(COLOR_MODE_EVENT, {
-        detail: { colorMode: mode },
+        detail: { colorMode },
       }),
     );
 
     const query = matchMedia("(prefers-color-scheme: dark)");
 
     function applyColorMode() {
-      const isDark = mode === COLOR_MODE.DARK || (mode === COLOR_MODE.SYSTEM && query.matches);
+      const isDark = colorMode === COLOR_MODE.DARK || (colorMode === COLOR_MODE.SYSTEM && query.matches);
       document.documentElement.classList.toggle(COLOR_MODE.DARK, isDark);
     }
 
     applyColorMode();
 
-    if (mode === COLOR_MODE.SYSTEM) {
+    if (colorMode === COLOR_MODE.SYSTEM) {
       query.addEventListener("change", applyColorMode);
       return () => query.removeEventListener("change", applyColorMode);
     }
-  }, [mode]);
+  }, [colorMode]);
 
-  return { mode, setMode };
+  return { colorMode, setColorMode };
 }
