@@ -1,7 +1,15 @@
 {
   "name": "@vlandoss/theme-toggle",
   "version": "0.0.0",
-  "description": "",
+  "description": "Light/dark/system color-mode toggle for React with a no-flash inline script",
+  "homepage": "https://github.com/variableland/theme-toggle#readme",
+  "bugs": {
+    "url": "https://github.com/variableland/theme-toggle/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/variableland/theme-toggle.git"
+  },
   "license": "MIT",
   "author": "rcrd <rcrd@variable.land>",
   "type": "module",
