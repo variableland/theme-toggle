@@ -51,6 +51,6 @@ jobs:
           publish: pnpm changeset publish
           setupGitUser: false
         env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           LEFTHOOK: 0
