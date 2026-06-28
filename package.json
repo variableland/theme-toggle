@@ -1,20 +1,22 @@
 {
   "name": "@vlandoss/theme-toggle",
   "version": "0.0.0",
-  "description": "",
+  "description": "Light/dark/system color-mode toggle for React with a no-flash inline script",
+  "homepage": "https://github.com/variableland/theme-toggle#readme",
+  "bugs": {
+    "url": "https://github.com/variableland/theme-toggle/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/variableland/theme-toggle.git"
+  },
   "license": "MIT",
-  "author": "Ricardo Q. Bazan <raquirozbazan@gmail.com>",
+  "author": "rcrd <rcrd@variable.land>",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
-  },
-  "publishConfig": {
-    "access": "public",
-    "exports": {
-      ".": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
-      }
+    ".": {
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
     }
   },
   "files": [
@@ -24,20 +26,41 @@
     "!src/**/*.test.*",
     "tsconfig.json"
   ],
-  "engines": {
-    "node": ">=20.0.0"
-  },
   "scripts": {
     "prepublishOnly": "rr pack",
-    "test": "vitest run"
+    "test": "rr test run"
   },
   "devDependencies": {
-    "@changesets/changelog-github": "0.5.2",
-    "@changesets/cli": "2.29.8",
-    "@rrlab/cli": "^0.1.0",
-    "@types/node": "latest",
-    "lefthook": "2.1.1",
-    "vitest": "^4.0.0"
+    "@biomejs/biome": "^2.0.0",
+    "@changesets/changelog-github": "^0.7.0",
+    "@changesets/cli": "^2.31.0",
+    "@rrlab/biome-config": "^0.0.2",
+    "@rrlab/biome-plugin": "^1.1.1",
+    "@rrlab/cli": "^1.3.0",
+    "@rrlab/oxc-plugin": "^1.1.1",
+    "@rrlab/ts-config": "^0.0.2",
+    "@rrlab/tsdown-config": "^0.1.0",
+    "@rrlab/tsdown-plugin": "^1.1.1",
+    "@rrlab/vitest-plugin": "^0.1.0",
+    "@types/node": "^24.13.2",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.0",
+    "@vitest/browser": "4.1.9",
+    "@vitest/browser-playwright": "4.1.9",
+    "lefthook": "^2.1.9",
+    "oxlint": "^1.0.0",
+    "oxlint-tsgolint": "^0.23.0",
+    "playwright": "1.61.1",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "tsdown": "^0.22.0",
+    "typescript": "^6.0.3",
+    "vitest": "^4.0.0",
+    "vitest-browser-react": "2.2.0"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
   },
   "packageManager": "pnpm@10.6.4"
 }

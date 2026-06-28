@@ -2,6 +2,8 @@ node_modules
 dist
 .turbo
 coverage
+__screenshots__
+.vitest-attachments
 
 # editor / OS
 .DS_Store
