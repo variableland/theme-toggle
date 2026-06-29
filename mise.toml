@@ -2,5 +2,5 @@
 _.path = ["{{config_root}}/node_modules/.bin"]
 
 [tools]
-node = "22"
+node = "24.16.0"
 pnpm = "10.6.4"
